@@ -158,7 +158,7 @@ public class Main implements Runnable, ActionListener{
           
           index = (index + 1) % 12;
         }
-        //
+      //if there are marbles less than to the points pit it doesnt put one in points pit
       }else if(marbles < 6){
         
         int index = Integer.parseInt(command);
@@ -178,6 +178,7 @@ public class Main implements Runnable, ActionListener{
         //output player text
         playerTurn(); 
 
+      //puts point in points pit but doesn't give you an extra turn
       }else if(marbles > 6){
         //takes marble from pit
         marbles--;
@@ -1026,7 +1027,7 @@ public class Main implements Runnable, ActionListener{
       pits[5].setText("" + 0);
     }
 
-
+    checkForEnd();
 
   }
 
@@ -1053,6 +1054,86 @@ public class Main implements Runnable, ActionListener{
           pits[i].setEnabled(true);
         }
         }
+    }
+  }
+
+  public void checkForEnd(){
+    int pOneZeros = 0;
+    int pTwoZeros = 0;
+    int pOneTotalPoints;
+    int pTwoTotalPoints;
+    //check the top row for zeros
+    for(int i = 0; i < pits.length; i++){
+      if(i < 6){
+      //get the text from the pit
+      String spots = pits[i].getText();
+      //change the text to an integer
+      int marbles = Integer.parseInt(spots);
+      //if there are no marbles add one to counter
+      if(marbles == 0){
+        pTwoZeros++;
+      }
+      }else{
+        //get the text from that pit
+        String spots2 = pits[i].getText();
+        //change the text to an integer
+        int marbles2 = Integer.parseInt(spots2);
+        //if there are no marbles add one to the counter
+        if(marbles2 == 0){
+          pOneZeros++;
+        }
+      }
+      if(pOneZeros == 6 || pTwoZeros == 6){
+        for(int a = 0; a < pits.length; a++){
+          //set all of the pits off
+          pits[a].setEnabled(false);
+          //add the points for player 2
+          if(i < 6){
+            //get the text from the pit
+            String spots = pits[a].getText();
+            //change the text to an integer
+            int marbles = Integer.parseInt(spots);
+
+            //gets the points from player 2
+            String pointsText = p2Points.getText();
+            //changes points into integer
+            int points = Integer.parseInt(pointsText);
+
+            points = points + marbles;
+            p2Points.setText("" + points);
+          }else{
+            //get the text from the pit
+            String spots2 = pits[a].getText();
+            //change the text to an integer
+            int marbles2 = Integer.parseInt(spots2);
+
+            //gets the points from player 1
+            String pointsText1 = p1Points.getText();
+            //changes points into integer
+            int points1 = Integer.parseInt(pointsText1);
+
+            points1 = points1 + marbles2;
+            p1Points.setText("" + points1);
+          }
+          //gets the points from player 1
+          String pointsText1 = p1Points.getText();
+          //changes points into integer
+          int points1 = Integer.parseInt(pointsText1);
+
+          //gets the points from player 2
+          String pointsText2 = p2Points.getText();
+          //changes points into integer
+          int points2 = Integer.parseInt(pointsText2);
+          
+          if(points1 > points2){
+            status.setText("Player 1 Wins!");
+          }else if(points1 < points2){
+            status.setText("Player 2 Wins!");
+          }else if(points1 == points2){
+            status.setText("Tie!");
+          }
+        }
+      }
     }
   }
 
